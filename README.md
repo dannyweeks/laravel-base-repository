@@ -43,7 +43,7 @@ Relationships are defined in the repositiory but are not eagerly loaded automati
 ```php
     // BaseRepository is located in the same folder
     class PostsRepository extends BaseRepository {
-        protected $model = 'Post';
+        protected $model = 'App\Models\Post';
         protected $relationships = ['comments', 'author'];
     }
 ```
