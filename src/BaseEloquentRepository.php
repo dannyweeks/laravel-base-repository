@@ -1,6 +1,9 @@
-<?php namespace Acme\Repositories;
+<?php
 
-abstract class BaseRepository {
+namespace Weeks\Laravel\Repositories;
+
+abstract class BaseEloquentRepository implements RepositoryContract
+{
 
     /**
      * Name of model associated with this repository
@@ -30,6 +33,7 @@ abstract class BaseRepository {
 
     /**
      * Get all items
+     *
      * @param  string $columns specific columns to select
      * @param  string $orderBy column to sort by
      * @param  string $sort sort direction
@@ -45,6 +49,7 @@ abstract class BaseRepository {
 
     /**
      * Get paged items
+     *
      * @param  integer $paged Items per page
      * @param  string $orderBy Column to sort by
      * @param  string $sort Sort direction
@@ -72,7 +77,8 @@ abstract class BaseRepository {
         return $this->model
             ->with($this->requiredRelationships)
             ->orderBy($orderBy, $sort)
-            ->lists($data, $key);
+            ->lists($data, $key)
+            ->all();
     }
 
     /**
@@ -127,8 +133,7 @@ abstract class BaseRepository {
      */
     public function getActively($term, $column = 'slug')
     {
-        if (is_numeric($term))
-        {
+        if (is_numeric($term)) {
             return $this->getById($term);
         }
 
@@ -157,8 +162,7 @@ abstract class BaseRepository {
     {
         $existing = $this->model->where(array_only($data, $identifiers))->first();
 
-        if ($existing)
-        {
+        if ($existing) {
             $existing->update($data);
 
             return $existing;
@@ -177,17 +181,15 @@ abstract class BaseRepository {
     {
         $this->requiredRelationships = [];
 
-        if ($relationships == 'all')
+        if ($relationships == 'all') {
             $this->requiredRelationships = $this->relationships;
-
-        elseif (is_array($relationships))
-            $this->requiredRelationships = array_filter($relationships, function ($value)
-            {
+        } elseif (is_array($relationships)) {
+            $this->requiredRelationships = array_filter($relationships, function ($value) {
                 return in_array($value, $this->relationships);
             });
-
-        elseif (is_string($relationships))
+        } elseif (is_string($relationships)) {
             array_push($this->requiredRelationships, $relationships);
+        }
 
         return $this;
     }

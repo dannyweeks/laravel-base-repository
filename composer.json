@@ -1,0 +1,33 @@
+
+{
+    "name": "dannyweeks/laravel-base-repository",
+    "description": "An abstract repository class for Laravel's Eloquent ORM.",
+    "keywords": [
+        "repository",
+        "eloquent",
+        "laravel"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Danny Weeks",
+            "email": "danny@dannyweeks.com",
+            "homepage": "http://dannyweeks.com/",
+            "role": "Developer"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^4.8",
+        "mockery/mockery": "^0.9.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Weeks\\Laravel\\Repositories\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Weeks\\Laravel\\Repositories\\": "test/"
+        }
+    }
+}
