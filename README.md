@@ -1,4 +1,6 @@
 # Laravel Base Repository
+!https://travis-ci.org/dannyweeks/laravel-base-repository.svg?branch=master!:https://travis-ci.org/dannyweeks/laravel-base-repository
+
 An abstract repository class implementing a general interface for your Eloquent repositories providing commonly needed repository methods.
  
 ## Installation

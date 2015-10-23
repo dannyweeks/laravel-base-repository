@@ -25,7 +25,7 @@ class BaseEloquentRepositoryTest extends \PHPUnit_Framework_TestCase {
     */
     public function it_is_an_instance_of_the_base_repo_class()
     {
-        $this->assertInstanceOf(BaseEloquentRepository::class, $this->repo);
+        $this->assertInstanceOf('Weeks\Laravel\Repositories\BaseEloquentRepository', $this->repo);
     }
 
     /**
@@ -33,7 +33,7 @@ class BaseEloquentRepositoryTest extends \PHPUnit_Framework_TestCase {
     */
     public function it_implements_the_contract()
     {
-        $this->assertInstanceOf(RepositoryContract::class, $this->repo);
+        $this->assertInstanceOf('Weeks\Laravel\Repositories\RepositoryContract', $this->repo);
     }
     
     /**
