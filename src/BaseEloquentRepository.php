@@ -4,7 +4,6 @@ namespace Weeks\Laravel\Repositories;
 
 abstract class BaseEloquentRepository implements RepositoryContract
 {
-
     /**
      * Name of model associated with this repository
      * @var string
@@ -21,7 +20,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * Array of relationships to include in next query
      * @var array
      */
-    private $requiredRelationships = [];
+    protected $requiredRelationships = [];
 
     /**
      * Get the model from the IoC container
@@ -172,7 +171,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
     }
 
     /**
-     * Choose what relationships to return with query
+     * Choose what relationships to return with query.
      *
      * @param null $relationships
      * @return $this
@@ -192,5 +191,22 @@ abstract class BaseEloquentRepository implements RepositoryContract
         }
 
         return $this;
+    }
+
+    /**
+     *  The repository does not cache by default.
+     * @return bool
+     */
+    public function isCaching()
+    {
+        return false;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCacheTtl()
+    {
+        return 60;
     }
 }

@@ -45,8 +45,8 @@ Relationships can be loaded in the following three ways using the `with()` metho
 
     namespace App\Models;
 
-    class Post extends \Eloquent {
-
+    class Post extends Illuminate\Database\Eloquent\Model
+    {
         public function comments()
         {
             return $this->hasMany('App\Models\Comment');
@@ -68,8 +68,49 @@ Relationships can be loaded in the following three ways using the `with()` metho
     
     use Weeks\Laravel\Repositories\BaseEloquentRepository;
     
-    class PostRepository extends BaseEloquentRepository {
+    class PostRepository extends BaseEloquentRepository
+    {
         protected $model = 'App\Models\Post';
         protected $relationships = ['comments', 'author'];
     }
 ```
+
+## Caching
+
+To enable caching on a repository just have it `use \Weeks\Laravel\Repositories\CacheResults;`.
+
+By doing this all the repository ['read'](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods cache their results using Laravel's caching system.
+
+```
+// Methods that cache when using the CacheResults trait.
+getAll
+getPaginated
+getForSelect
+getById
+getItemByColumn
+getCollectionByColumn
+getActively
+```
+
+An example using the CacheResults trait.
+```php
+
+    namespace App\Repositories;
+    
+    use Weeks\Laravel\Repositories\BaseEloquentRepository;
+    use Weeks\Laravel\Repositories\CacheResults;
+    
+    class PostRepository extends BaseEloquentRepository
+    {
+        use CacheResults;
+        
+        protected $model = 'App\Models\Post';
+        protected $relationships = ['comments', 'author'];
+        protected $ignoredMethods = ['getById'];
+        protected $cacheTtl = 30;
+    }
+```
+
+You can force the result of a request not to be cached by adding the method name to the `$ignoredMethods` property of your repository. See example above.
+
+By default the [ttl](https://en.wikipedia.org/wiki/Time_to_live) of a cache item is 60 minutes. This can be overwritten by updating the ` $cacheTtl` property of your repository. See example above.

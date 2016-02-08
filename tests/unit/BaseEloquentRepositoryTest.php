@@ -1,14 +1,14 @@
 <?php
 
-namespace Weeks\Laravel\Repositories;
-
 use Mockery as m;
 use PHPUnit_Framework_Assert as reader;
+use Weeks\Laravel\Repositories\BaseEloquentRepository;
 
-class BaseEloquentRepositoryTest extends \PHPUnit_Framework_TestCase {
+class BaseEloquentRepositoryTest extends \PHPUnit_Framework_TestCase
+{
     /**
-     * @var BaseRepository
-    */
+     * @var BaseEloquentRepository
+     */
     protected $repo;
 
     public function setUp()
@@ -16,37 +16,38 @@ class BaseEloquentRepositoryTest extends \PHPUnit_Framework_TestCase {
         $this->repo = new RepoStub();
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         m::close();
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_is_an_instance_of_the_base_repo_class()
     {
         $this->assertInstanceOf('Weeks\Laravel\Repositories\BaseEloquentRepository', $this->repo);
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_implements_the_contract()
     {
         $this->assertInstanceOf('Weeks\Laravel\Repositories\RepositoryContract', $this->repo);
     }
-    
+
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_does_not_eagerly_include_relationships()
     {
         $this->assertEquals([], reader::readAttribute($this->repo, 'requiredRelationships'));
     }
-    
+
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_loads_all_relationships_with_the_all_keyword()
     {
         $this->repo->with('all');
@@ -54,8 +55,8 @@ class BaseEloquentRepositoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_sets_a_single_relationship_when_a_string_is_given()
     {
         $this->repo->with('author');
@@ -63,8 +64,8 @@ class BaseEloquentRepositoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_sets_allowed_relationships_and_ignores_the_rest()
     {
         $this->repo->with(['author', 'comments', 'notAllowed']);
@@ -72,8 +73,8 @@ class BaseEloquentRepositoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_applies_the_requested_relationship_to_the_query()
     {
         /** @var ModelStub $model */
@@ -85,23 +86,35 @@ class BaseEloquentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 }
 
-class RepoStub extends BaseEloquentRepository{
+class RepoStub extends BaseEloquentRepository
+{
     protected $model = 'TestModel';
     protected $relationships = ['author', 'comments'];
+
+    public function __construct()
+    {
+        $this->model = new ModelStub();
+    }
 }
 
-class ModelStub{
-
+class ModelStub
+{
     protected $requestedRelationships;
 
-    public function orderBy(){
+    public function orderBy()
+    {
         return $this;
     }
-    public function with(array $requestedRelationships = []){
+
+    public function with(array $requestedRelationships = [])
+    {
         $this->requestedRelationships = $requestedRelationships;
+
         return $this;
     }
-    public function get(){
+
+    public function get()
+    {
         return $this;
     }
 
@@ -112,10 +125,4 @@ class ModelStub{
     {
         return $this->requestedRelationships;
     }
-}
-
-function app(){
-    $app = m::mock('mockApp');
-    $app->shouldReceive('make')->once()->andReturn(new ModelStub());
-    return $app;
 }

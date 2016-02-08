@@ -1,4 +1,3 @@
-
 {
     "name": "dannyweeks/laravel-base-repository",
     "description": "An abstract repository class for Laravel's Eloquent ORM.",
@@ -16,7 +15,12 @@
             "role": "Developer"
         }
     ],
+    "require": {
+        "illuminate/database": ">4.0",
+        "illuminate/pagination": "5.2.*"
+    },
     "require-dev": {
+        "orchestra/testbench": "3.2.*",
         "phpunit/phpunit": "^4.8",
         "mockery/mockery": "^0.9.4"
     },
@@ -29,5 +33,8 @@
         "psr-4": {
             "Weeks\\Laravel\\Repositories\\": "test/"
         }
+    },
+    "suggest": {
+        "illuminate/cache": "Required to use the Caching trait (5.2.*)."
     }
 }

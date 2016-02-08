@@ -2,8 +2,8 @@
 
 namespace Weeks\Laravel\Repositories;
 
-interface RepositoryContract {
-
+interface RepositoryContract
+{
     /**
      * Get all items
      *
@@ -13,7 +13,6 @@ interface RepositoryContract {
      */
     public function getAll($columns = null, $orderBy = 'created_at', $sort = 'DECS');
 
-
     /**
      * Get paged items
      *
@@ -22,7 +21,6 @@ interface RepositoryContract {
      * @param  string $sort Sort direction
      */
     public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'DECS');
-
 
     /**
      * Items for select options
@@ -35,14 +33,12 @@ interface RepositoryContract {
      */
     public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'DECS');
 
-
     /**
      * Get item by its id
      *
      * @param  integer $id
      */
     public function getById($id);
-
 
     /**
      * Get instance of model by column
@@ -52,7 +48,6 @@ interface RepositoryContract {
      */
     public function getItemByColumn($term, $column = 'slug');
 
-
     /**
      * Get instance of model by column
      *
@@ -60,7 +55,6 @@ interface RepositoryContract {
      * @param  string $column column to search
      */
     public function getCollectionByColumn($term, $column = 'slug');
-
 
     /**
      * Get item by id or column
@@ -77,7 +71,6 @@ interface RepositoryContract {
      * @param array $data
      */
     public function create(array $data);
-
 
     /**
      * Update or crate a record and return the entity
