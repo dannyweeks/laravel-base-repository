@@ -122,9 +122,9 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
     {
         $title = 'a post';
         $body = 'some witty blog post';
-        $this->posts->create(['title' => $title, 'body' => $body]);
+        $created = $this->posts->create(['title' => $title, 'body' => $body]);
 
-        $post = Post::find(1);
+        $post = Post::find($created->id);
 
         $this->assertEquals($post->title, $title);
         $this->assertEquals($post->body, $body);
