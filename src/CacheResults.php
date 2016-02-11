@@ -2,6 +2,9 @@
 
 namespace Weeks\Laravel\Repositories;
 
+/**
+ * @todo Clear cache if a record is updated. Maybe use updated_at as cache key.
+ */
 trait CacheResults
 {
     // Implement Parent Methods
