@@ -2,11 +2,13 @@
 
 namespace Weeks\Laravel\Repositories;
 
+use Illuminate\Database\Eloquent\Model;
+
 abstract class BaseEloquentRepository implements RepositoryContract
 {
     /**
      * Name of model associated with this repository
-     * @var string
+     * @var Model
      */
     protected $model;
 
@@ -168,6 +170,16 @@ abstract class BaseEloquentRepository implements RepositoryContract
         }
 
         return $this->create($data);
+    }
+
+    /**
+     * Delete a record by the primary key.
+     *
+     * @param $id
+     */
+    public function delete($id)
+    {
+        return $this->model->where($this->model->getKeyName(), $id)->delete();
     }
 
     /**

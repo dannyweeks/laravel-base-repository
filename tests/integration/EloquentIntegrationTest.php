@@ -129,6 +129,18 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
         $this->assertEquals($post->title, $title);
         $this->assertEquals($post->body, $body);
     }
+
+    /**
+    * @test
+    */
+    public function it_can_delete_a_record()
+    {
+        $created = factory(Post::class)->create();
+
+        $this->posts->delete($created->id);
+
+        $this->assertFalse(in_array($created->id, Post::all()->pluck('id')->toArray()));
+    }
 }
 
 class Post extends Eloquent
