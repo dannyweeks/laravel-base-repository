@@ -130,6 +130,23 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
         $this->assertEquals($post->body, $body);
     }
 
+    public function it_can_update_a_record()
+    {
+        $current = factory(Post::class)->create();
+
+        $data = [
+            'title' => 'some new title',
+            'body' => 'important message',
+        ];
+        $post = Post::find($current->id);
+
+        $returnedPost = $this->posts->update($id, $data);
+
+        $this->assertEquals($post->title, $data['title']);
+        $this->assertEquals($post->body, $data['body']);
+        $this->assertEquals($post, $returnedPost);
+    }
+
     /**
     * @test
     */

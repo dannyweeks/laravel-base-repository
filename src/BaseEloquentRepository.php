@@ -152,6 +152,18 @@ abstract class BaseEloquentRepository implements RepositoryContract
         return $this->model->create($data);
     }
 
+
+    /**
+     * Update a record using the primary key.
+     *
+     * @param $id mixed primary key
+     * @param $data array
+     */
+    public function update($id, array $data)
+    {
+        return $this->model->where($this->model->getKeyName(), $id)->update($data);
+    }
+
     /**
      * Update or crate a record and return the entity
      *
