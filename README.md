@@ -7,7 +7,7 @@ An abstract repository class for your Eloquent repositories that requires minima
 
 - 2 minute setup.
 - 10 useful methods out of the box such as `getById`.
-- Flexible relationship support. 
+- Flexible relationship support including eager loading.. 
 - Optional easy to use Caching.
 - Optional 404 exceptions when items aren't found.
 
@@ -41,9 +41,7 @@ That's it! Let's test it out.
 ## Usage
 Your repositories must extend the `BaseEloquentRepository` class and have the properties: 
 - `protected $model`: the name of your model (including it's namespace)
-- `protected $relationships`: (Optional) an array of the methods available to be included when retrieving items. 
-
-Be sure to check out the [example repository](#examples).
+- `protected $relationships`: (Optional) an array of the methods available to be included when retrieving items.
 
 ```php
     $posts = new App\Repositories\PostRepository();
@@ -51,6 +49,8 @@ Be sure to check out the [example repository](#examples).
     $allPosts = $posts->getAll();
     $allPostsIncludingComments = $posts->with('comments')->getAll();
 ```
+
+Be sure to check out the [example](#an-example).
 
 ## Available Methods
 See the [repository interface](https://github.com/dannyweeks/laravel-base-repository/blob/master/src/RepositoryContract.php) class for the full API.
@@ -65,7 +65,9 @@ Relationships can be loaded in the following three ways using the `with()` metho
 - `$postRepository->with(['comments', 'author'])->getAll(); ` retrieve relationships using an array
 - `$postRepository->with('comments')->getAll(); ` retrieve relationship using a string
 
-## Examples
+## An Example
+
+This example shows how your model, repository and controller could be set up.
 
 *app\Models\Post.php*
 
@@ -100,6 +102,33 @@ Relationships can be loaded in the following three ways using the `with()` metho
     {
         protected $model = App\Models\Post::class;
         protected $relationships = ['comments', 'author'];
+    }
+```
+
+*app\Http\Controllers\PostController.php*
+
+```php
+
+    namespace App\Http\Controllers;
+    
+    use App\Repositories\PostRepository;
+    
+    class PostController extends Controller
+    {
+        protected $posts;
+        
+        public function __construct(PostRepository $posts) 
+        {
+            $this->posts = $posts;
+        }
+        
+        public function show($id)
+        {
+            // get the post and eagerly load the comments for it too.
+            $post = $this->posts->with('comments')->getById($id);
+            
+            return view('posts.show', compact('post'));
+        }
     }
 ```
 
