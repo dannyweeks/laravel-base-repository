@@ -1,14 +1,34 @@
 # Laravel Base Repository
 [![Build Status](https://travis-ci.org/dannyweeks/laravel-base-repository.svg?branch=v0.1)](https://travis-ci.org/dannyweeks/laravel-base-repository)
 
-An abstract repository class implementing a general interface for your Eloquent repositories providing commonly needed repository methods.
- 
-## Installation
+An abstract repository class for your Eloquent repositories that requires minimal config to get started. 
+
+## Quick Start
+
 Install via [Composer](http://getcomposer.org).
 
 `composer require dannyweeks/laravel-base-repository`
 
-Update/create your repositories by extending them with `Weeks\Laravel\Repositories\BaseEloquentRepository`. See [Usage](#usage) for more information.
+Extend your repositories with `Weeks\Laravel\Repositories\BaseEloquentRepository`. See [Usage](#usage) for more information.
+
+Add the `$model` property to your repository telling the base repository what model to use.
+
+```php
+    namespace App\Repositories;
+ 
+    class PostRepository extends \Weeks\Laravel\Repositories\BaseEloquentRepository
+    {
+        protected $model = \App\Models\Post::class;
+    }
+```
+
+That's it! Let's test it out.
+
+```php
+    $repo = new App\Repositories\PostRepository();
+    var_dump($repo->getById(1)); // Returns the Post with an ID of 1.
+    var_dump($repo->getAll()); // Returns a collection of all your posts.
+```
 
 ## Usage
 Your repositories must extend the `BaseEloquentRepository` class and have two properties: 
@@ -25,7 +45,7 @@ Be sure to check out the [example repository](#examples).
 ```
 
 ## Available Methods
-See the [BaseEloquentRepository](https://github.com/dannyweeks/laravel-base-repository/blob/master/src/BaseEloquentRepository.php) class for the full API.
+See the [repository interface](https://github.com/dannyweeks/laravel-base-repository/blob/master/src/RepositoryContract.php) class for the full API.
 
 ## Relationships
 
@@ -70,7 +90,7 @@ Relationships can be loaded in the following three ways using the `with()` metho
     
     class PostRepository extends BaseEloquentRepository
     {
-        protected $model = 'App\Models\Post';
+        protected $model = App\Models\Post::class;
         protected $relationships = ['comments', 'author'];
     }
 ```
@@ -97,7 +117,8 @@ An example using the ThrowsHttpExceptions trait.
     class PostRepository extends BaseEloquentRepository
     {
         use ThrowsHttpExceptions;
-
+        
+        protected $model = App\Models\Post::class;
     }
 ```
 
@@ -130,7 +151,7 @@ An example using the CacheResults trait.
     {
         use CacheResults;
         
-        protected $model = 'App\Models\Post';
+        protected $model = App\Models\Post::class;
         protected $relationships = ['comments', 'author'];
         protected $ignoredMethods = ['getById'];
         protected $cacheTtl = 30;

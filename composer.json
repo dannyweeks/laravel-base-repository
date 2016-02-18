@@ -1,10 +1,12 @@
 {
     "name": "dannyweeks/laravel-base-repository",
-    "description": "An abstract repository class for Laravel's Eloquent ORM.",
+    "description": "An abstract repository class for your Eloquent repositories that requires minimal config to get started.",
     "keywords": [
         "repository",
+        "repositories",
         "eloquent",
-        "laravel"
+        "laravel",
+        "laravel 5"
     ],
     "license": "MIT",
     "authors": [
@@ -32,7 +34,10 @@
     "autoload-dev": {
         "psr-4": {
             "Weeks\\Laravel\\Repositories\\": "test/"
-        }
+        },
+        "classmap": [
+            "tests/BaseTestCase.php"
+        ]
     },
     "suggest": {
         "illuminate/cache": "Required to use the Caching trait (5.2.*)."

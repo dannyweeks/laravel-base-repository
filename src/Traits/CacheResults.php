@@ -8,19 +8,11 @@ namespace Weeks\Laravel\Repositories\Traits;
 trait CacheResults
 {
     /**
-     * @return bool
-     */
-    public function isCaching()
-    {
-        return true;
-    }
-
-    /**
      * Get ttl (minutes).
      *
      * @return int
      */
-    public function getCacheTtl()
+    protected function getCacheTtl()
     {
         return isset($this->cacheTtl) ? $this->cacheTtl : 60;
     }
@@ -30,7 +22,7 @@ trait CacheResults
      *
      * @return array
      */
-    public function getIgnoredMethods()
+    protected function getIgnoredMethods()
     {
         return isset($this->ignoredMethods) ? $this->ignoredMethods : [];
     }
@@ -62,7 +54,7 @@ trait CacheResults
      * @param $args array Argument to pass into the method.
      * @return string
      */
-    public function createCacheKey($functionName, $args)
+    protected function createCacheKey($functionName, $args)
     {
         return sprintf('%s.%s.%s', get_class(), $functionName, md5(implode('|', $args)));
     }

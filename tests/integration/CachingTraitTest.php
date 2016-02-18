@@ -3,7 +3,7 @@
 use Weeks\Laravel\Repositories\BaseEloquentRepository;
 use Weeks\Laravel\Repositories\Traits\CacheResults;
 
-class CachingTraitTest extends Orchestra\Testbench\TestCase
+class CachingTraitTest extends BaseTestCase
 {
     /**
      * @var CachingRepository
@@ -44,7 +44,7 @@ class CachingTraitTest extends Orchestra\Testbench\TestCase
      */
     public function repo_is_aware_it_is_caching()
     {
-        $this->assertTrue($this->repo->isCaching());
+        $this->assertTrue($this->invokeMethod($this->repo, 'isCaching'));
     }
 
     /**
@@ -52,7 +52,7 @@ class CachingTraitTest extends Orchestra\Testbench\TestCase
      */
     public function default_ttl_can_be_overridden()
     {
-        $this->assertEquals(30, $this->repo->getCacheTtl());
+        $this->assertEquals(30, $this->invokeMethod($this->repo, 'getCacheTtl'));
     }
 
     /**
@@ -68,7 +68,6 @@ class CachingTraitTest extends Orchestra\Testbench\TestCase
         $this->repo->getAll();
 
         $this->assertEquals($before, count(\DB::getQueryLog()));
-
     }
 
     /**

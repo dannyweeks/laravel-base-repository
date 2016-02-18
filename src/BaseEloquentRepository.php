@@ -32,7 +32,6 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     protected $uses = [];
 
-    protected $cacheResults = false;
     protected $cacheTtl = 60;
 
     /**
@@ -283,7 +282,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
     {
         $traits = $this->getUsedTraits();
 
-        if (in_array(CacheResults::class, $traits)) {
+        if ($this->isCaching()) {
             $allowedMethods = [
                 'getAll',
                 'getPaginated',
@@ -328,15 +327,15 @@ abstract class BaseEloquentRepository implements RepositoryContract
      *  The repository does not cache by default.
      * @return bool
      */
-    public function isCaching()
+    protected function isCaching()
     {
-        return $this->cacheResults;
+        return in_array(CacheResults::class, $this->getUsedTraits());
     }
 
     /**
      * @return int
      */
-    public function getCacheTtl()
+    protected function getCacheTtl()
     {
         return $this->cacheTtl;
     }
