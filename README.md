@@ -3,15 +3,23 @@
 
 An abstract repository class for your Eloquent repositories that requires minimal config to get started. 
 
+## Features
+
+- 2 minute setup.
+- 10 useful methods out of the box such as `getById`.
+- Flexible relationship support. 
+- Optional easy to use Caching.
+- Optional 404 exceptions when items aren't found.
+
 ## Quick Start
 
 Install via [Composer](http://getcomposer.org).
 
 `composer require dannyweeks/laravel-base-repository`
 
-Extend your repositories with `Weeks\Laravel\Repositories\BaseEloquentRepository`. See [Usage](#usage) for more information.
+Extend your repositories with `Weeks\Laravel\Repositories\BaseEloquentRepository`.
 
-Add the `$model` property to your repository telling the base repository what model to use.
+Add the `$model` property to your repository so the base repository knows what model to use.
 
 ```php
     namespace App\Repositories;
@@ -31,9 +39,9 @@ That's it! Let's test it out.
 ```
 
 ## Usage
-Your repositories must extend the `BaseEloquentRepository` class and have two properties: 
+Your repositories must extend the `BaseEloquentRepository` class and have the properties: 
 - `protected $model`: the name of your model (including it's namespace)
-- `protected $relationships`: an array of the methods available to be included when retrieving items. 
+- `protected $relationships`: (Optional) an array of the methods available to be included when retrieving items. 
 
 Be sure to check out the [example repository](#examples).
 
