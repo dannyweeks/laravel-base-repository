@@ -7,19 +7,38 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 trait ThrowsHttpExceptions
 {
     /**
-     * @param $column
-     * @param $id
-     * @throws HttpException
+     * @param string $methodName
+     * @param string $args
      */
-    protected function throwItemNotFoundHttpException($column, $id)
+    protected function throwNotFoundHttpException($methodName = '', $args = '')
     {
-        $message = sprintf(
-            'Item not found with the %s of \'%s\' in the %s model via the %s.',
-            $column,
-            $id,
-            class_basename($this->model),
-            class_basename($this)
-        );
+        $columnIdFormat = 'Item not found with the %3$s of \'%4$s\' in the %1$s model via the %2$s.';
+        $format = 'Requested item does not exist in the %s model via %s.';
+        $data = [];
+
+        if ($methodName == 'getById') {
+            $format = $columnIdFormat;
+            $data = ['id', $args[0]];
+        }
+
+        if ($methodName == 'getItemByColumn') {
+            $format = $columnIdFormat;
+            $data = [$args[1], $args[0]];
+        }
+
+        $message = $this->createExceptionMessage($format, $data);
+
         throw new HttpException(404, $message);
+    }
+
+    private function createExceptionMessage($format, $data = [])
+    {
+        return vsprintf(
+            $format,
+            array_merge([
+                class_basename($this->model),
+                class_basename($this)
+            ], $data)
+        );
     }
 }

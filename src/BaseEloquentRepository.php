@@ -3,6 +3,8 @@
 namespace Weeks\Laravel\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Weeks\Laravel\Repositories\Traits\CacheResults;
+use Weeks\Laravel\Repositories\Traits\ThrowsHttpExceptions;
 
 abstract class BaseEloquentRepository implements RepositoryContract
 {
@@ -25,11 +27,18 @@ abstract class BaseEloquentRepository implements RepositoryContract
     protected $requiredRelationships = [];
 
     /**
+     * Array of traits being used by the repository.
+     * @var array
+     */
+    protected $uses = [];
+
+    /**
      * Get the model from the IoC container
      */
     public function __construct()
     {
         $this->model = app()->make($this->model);
+        $this->setUses();
     }
 
     /**
@@ -42,10 +51,12 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getAll($columns = null, $orderBy = 'created_at', $sort = 'DECS')
     {
-        return $this->model
+        $result = $this->model
             ->with($this->requiredRelationships)
             ->orderBy($orderBy, $sort)
             ->get($columns);
+
+        return $this->applyTraits($result, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -58,10 +69,12 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'DECS')
     {
-        return $this->model
+        $result = $this->model
             ->with($this->requiredRelationships)
             ->orderBy($orderBy, $sort)
             ->paginate($paged);
+
+        return $this->applyTraits($result, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -75,11 +88,13 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'DECS')
     {
-        return $this->model
+        $result = $this->model
             ->with($this->requiredRelationships)
             ->orderBy($orderBy, $sort)
             ->lists($data, $key)
             ->all();
+
+        return $this->applyTraits($result, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -90,9 +105,11 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getById($id)
     {
-        return $this->model
+        $result = $this->model
             ->with($this->requiredRelationships)
             ->find($id);
+
+        return $this->applyTraits($result, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -104,10 +121,12 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getItemByColumn($term, $column = 'slug')
     {
-        return $this->model
+        $result = $this->model
             ->with($this->requiredRelationships)
             ->where($column, '=', $term)
             ->first();
+
+        return $this->applyTraits($result, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -119,10 +138,12 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getCollectionByColumn($term, $column = 'slug')
     {
-        return $this->model
+        $result = $this->model
             ->with($this->requiredRelationships)
             ->where($column, '=', $term)
             ->get();
+
+        return $this->applyTraits($result, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -151,7 +172,6 @@ abstract class BaseEloquentRepository implements RepositoryContract
     {
         return $this->model->create($data);
     }
-
 
     /**
      * Update a record using the primary key.
@@ -218,6 +238,31 @@ abstract class BaseEloquentRepository implements RepositoryContract
     }
 
     /**
+     * Apply any trait functionality the repo is using.
+     *
+     * @param $result
+     * @param $methodName
+     * @param $arguments
+     * @return mixed
+     */
+    protected function applyTraits($result, $methodName, $arguments)
+    {
+        $traits = $this->getUsedTraits();
+
+        if (in_array(ThrowsHttpExceptions::class, $traits)) {
+            if (is_null($result)) {
+                $this->throwNotFoundHttpException($methodName, $arguments);
+            }
+        }
+
+        if (in_array(CacheResults::class, $traits)) {
+            
+        }
+
+        return $result;
+    }
+
+    /**
      *  The repository does not cache by default.
      * @return bool
      */
@@ -232,5 +277,23 @@ abstract class BaseEloquentRepository implements RepositoryContract
     public function getCacheTtl()
     {
         return 60;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function setUses()
+    {
+        $this->uses = array_flip(class_uses_recursive(get_class($this)));
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getUsedTraits()
+    {
+        return $this->uses;
     }
 }
