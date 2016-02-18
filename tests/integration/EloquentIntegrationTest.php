@@ -33,14 +33,14 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
         $this->posts = new PostRepository();
         $this->artisan('migrate', [
             '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__.'/../migrations'),
+            '--realpath' => realpath(__DIR__ . '/../migrations'),
         ]);
-        $this->withFactories(realpath(__DIR__.'/../factories'));
+        $this->withFactories(realpath(__DIR__ . '/../factories'));
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_fetches_all_the_records()
     {
         factory(Post::class, 2)->create();
@@ -51,8 +51,8 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_paginates_records()
     {
         factory(Post::class, 10)->create();
@@ -64,8 +64,8 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_formats_records_for_a_select_field()
     {
         factory(Post::class, 4)->create();
@@ -91,8 +91,8 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_fetches_record_by_column()
     {
         $post = factory(Post::class)->create(['title' => 'a funky title']);
@@ -102,8 +102,8 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_fetches_collection_by_column()
     {
         $title = 'a super funky title';
@@ -116,8 +116,8 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_can_persist_a_record()
     {
         $title = 'a post';
@@ -136,7 +136,7 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
 
         $data = [
             'title' => 'some new title',
-            'body' => 'important message',
+            'body'  => 'important message',
         ];
         $post = Post::find($current->id);
 
@@ -148,8 +148,8 @@ class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_can_delete_a_record()
     {
         $created = factory(Post::class)->create();

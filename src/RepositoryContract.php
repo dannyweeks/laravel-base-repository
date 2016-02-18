@@ -80,4 +80,12 @@ interface RepositoryContract
      */
     public function updateOrCreate(array $identifiers, array $data);
 
+    /**
+     * Delete a record by it's ID.
+     *
+     * @param $id
+     * @return bool
+     */
+    public function delete($id);
+
 }

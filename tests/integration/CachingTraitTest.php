@@ -33,9 +33,9 @@ class CachingTraitTest extends Orchestra\Testbench\TestCase
         \DB::enableQueryLog();
         $this->artisan('migrate', [
             '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__.'/../migrations'),
+            '--realpath' => realpath(__DIR__ . '/../migrations'),
         ]);
-        $this->withFactories(realpath(__DIR__.'/../factories'));
+        $this->withFactories(realpath(__DIR__ . '/../factories'));
         $this->repo = new CachingRepository();
     }
 
@@ -48,16 +48,16 @@ class CachingTraitTest extends Orchestra\Testbench\TestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function default_ttl_can_be_overridden()
     {
         $this->assertEquals(30, $this->repo->getCacheTtl());
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_caches_the_request()
     {
         factory(Post::class)->create();
@@ -72,8 +72,8 @@ class CachingTraitTest extends Orchestra\Testbench\TestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_ignores_specified_requests()
     {
         factory(Post::class)->create();

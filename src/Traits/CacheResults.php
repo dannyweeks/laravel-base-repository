@@ -45,7 +45,7 @@ trait CacheResults
      */
     protected function processCacheRequest($callback, $method, $args)
     {
-        if ($this->isCaching() && ! in_array($method, $this->getIgnoredMethods())) {
+        if ($this->isCaching() && !in_array($method, $this->getIgnoredMethods())) {
 
             $key = $this->createCacheKey($method, $args);
 

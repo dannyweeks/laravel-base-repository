@@ -32,6 +32,9 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     protected $uses = [];
 
+    protected $cacheResults = false;
+    protected $cacheTtl = 60;
+
     /**
      * Get the model from the IoC container
      */
@@ -223,6 +226,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * Delete a record by the primary key.
      *
      * @param $id
+     * @return bool
      */
     public function delete($id)
     {
@@ -326,7 +330,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function isCaching()
     {
-        return false;
+        return $this->cacheResults;
     }
 
     /**
@@ -334,7 +338,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getCacheTtl()
     {
-        return 60;
+        return $this->cacheTtl;
     }
 
     /**
