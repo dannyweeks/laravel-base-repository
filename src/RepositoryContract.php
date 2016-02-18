@@ -36,7 +36,7 @@ interface RepositoryContract
     /**
      * Get item by its id
      *
-     * @param  integer $id
+     * @param  mixed $id
      */
     public function getById($id);
 
