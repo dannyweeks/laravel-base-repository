@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Weeks\Laravel\Repositories\BaseEloquentRepository;
 
-class EloquentIntegrationTest extends Orchestra\Testbench\TestCase
+class EloquentIntegrationTest extends BaseTestCase
 {
     /**
      * @var PostRepository

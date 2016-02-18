@@ -4,7 +4,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Weeks\Laravel\Repositories\BaseEloquentRepository;
 use Weeks\Laravel\Repositories\Traits\ThrowsHttpExceptions;
 
-class ThrowsHttpExceptionsTraitTest extends Orchestra\Testbench\TestCase
+class ThrowsHttpExceptionsTraitTest extends BaseTestCase
 {
     /**
      * @var CachingRepository
