@@ -1,6 +1,6 @@
 <?php
 
-namespace Weeks\Laravel\Repositories;
+namespace Weeks\Laravel\Repositories\Traits;
 
 /**
  * @todo Clear cache if a record is updated. Maybe use updated_at as cache key.

@@ -1,7 +1,7 @@
 <?php
 
 use Weeks\Laravel\Repositories\BaseEloquentRepository;
-use Weeks\Laravel\Repositories\CacheResults;
+use Weeks\Laravel\Repositories\Traits\CacheResults;
 
 class CachingTraitTest extends Orchestra\Testbench\TestCase
 {
