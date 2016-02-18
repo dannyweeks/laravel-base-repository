@@ -58,8 +58,8 @@ trait CacheResults
     /**
      * Make a unique key for this specific request.
      *
-     * @param $functionName Name of method to call.
-     * @param $args Argument to pass into the method.
+     * @param $functionName string Name of method to call.
+     * @param $args array Argument to pass into the method.
      * @return string
      */
     public function createCacheKey($functionName, $args)
