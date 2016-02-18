@@ -5,12 +5,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 ### Added
-- Results caching. Just add `use \Weeks\Laravel\Repositories\CacheResults;` to your repositories and let Laravel do the rest.
+- Results caching. Just add `use \Weeks\Laravel\Repositories\Traits\CacheResults;` to your repositories and let me do the rest.
+- Have the throw HTTP exceptions when appropriate. Just add `use \Weeks\Laravel\Repositories\Traits\ThrowsHttpExceptions;` to your repositories and let me do the rest.
 - Eloquent integration tests.
 - Cache trait tests.
+- Http trait tests.
 
 ### Changed
 - Include composer.lock file in VC.
+- All methods 'get' type methods are wrapped in doQuery method.
 
 ### Fixed
 - PSR-2 compliance.

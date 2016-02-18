@@ -51,12 +51,16 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getAll($columns = null, $orderBy = 'created_at', $sort = 'DECS')
     {
-        $result = $this->model
-            ->with($this->requiredRelationships)
-            ->orderBy($orderBy, $sort)
-            ->get($columns);
+        $query = function () use ($columns, $orderBy, $sort) {
 
-        return $this->applyTraits($result, __FUNCTION__, func_get_args());
+            return $this->model
+                ->with($this->requiredRelationships)
+                ->orderBy($orderBy, $sort)
+                ->get($columns);
+
+        };
+
+        return $this->doQuery($query, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -69,12 +73,15 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'DECS')
     {
-        $result = $this->model
-            ->with($this->requiredRelationships)
-            ->orderBy($orderBy, $sort)
-            ->paginate($paged);
+        $query = function () use ($paged, $orderBy, $sort) {
 
-        return $this->applyTraits($result, __FUNCTION__, func_get_args());
+            return $this->model
+                ->with($this->requiredRelationships)
+                ->orderBy($orderBy, $sort)
+                ->paginate($paged);
+        };
+
+        return $this->doQuery($query, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -88,13 +95,15 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'DECS')
     {
-        $result = $this->model
-            ->with($this->requiredRelationships)
-            ->orderBy($orderBy, $sort)
-            ->lists($data, $key)
-            ->all();
+        $query = function () use ($data, $key, $orderBy, $sort) {
+            return $this->model
+                ->with($this->requiredRelationships)
+                ->orderBy($orderBy, $sort)
+                ->lists($data, $key)
+                ->all();
+        };
 
-        return $this->applyTraits($result, __FUNCTION__, func_get_args());
+        return $this->doQuery($query, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -105,11 +114,13 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getById($id)
     {
-        $result = $this->model
-            ->with($this->requiredRelationships)
-            ->find($id);
+        $query = function () use ($id) {
+            return $this->model
+                ->with($this->requiredRelationships)
+                ->find($id);
+        };
 
-        return $this->applyTraits($result, __FUNCTION__, func_get_args());
+        return $this->doQuery($query, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -121,12 +132,14 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getItemByColumn($term, $column = 'slug')
     {
-        $result = $this->model
-            ->with($this->requiredRelationships)
-            ->where($column, '=', $term)
-            ->first();
+        $query = function () use ($term, $column) {
+            return $this->model
+                ->with($this->requiredRelationships)
+                ->where($column, '=', $term)
+                ->first();
+        };
 
-        return $this->applyTraits($result, __FUNCTION__, func_get_args());
+        return $this->doQuery($query, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -138,12 +151,14 @@ abstract class BaseEloquentRepository implements RepositoryContract
      */
     public function getCollectionByColumn($term, $column = 'slug')
     {
-        $result = $this->model
-            ->with($this->requiredRelationships)
-            ->where($column, '=', $term)
-            ->get();
+        $query = function () use ($term, $column) {
+            return $this->model
+                ->with($this->requiredRelationships)
+                ->where($column, '=', $term)
+                ->get();
+        };
 
-        return $this->applyTraits($result, __FUNCTION__, func_get_args());
+        return $this->doQuery($query, __FUNCTION__, func_get_args());
     }
 
     /**
@@ -238,14 +253,61 @@ abstract class BaseEloquentRepository implements RepositoryContract
     }
 
     /**
-     * Apply any trait functionality the repo is using.
+     * Perform the repository query.
+     *
+     * @param $callback
+     * @param $methodName
+     * @param $arguments
+     * @return mixed
+     */
+    protected function doQuery($callback, $methodName, $arguments)
+    {
+        $result = $this->doBeforeQuery($callback, $methodName, $arguments);
+
+        return $this->doAfterQuery($result, $methodName, $arguments);
+    }
+
+    /**
+     *  Apply any modifiers to the query.
+     *
+     * @param $callback
+     * @param $methodName
+     * @param $arguments
+     * @return mixed
+     */
+    protected function doBeforeQuery($callback, $methodName, $arguments)
+    {
+        $traits = $this->getUsedTraits();
+
+        if (in_array(CacheResults::class, $traits)) {
+            $allowedMethods = [
+                'getAll',
+                'getPaginated',
+                'getForSelect',
+                'getById',
+                'getItemByColumn',
+                'getCollectionByColumn',
+                'getActively',
+            ];
+
+            if (in_array($methodName, $allowedMethods)) {
+                return $this->processCacheRequest($callback, $methodName, $arguments);
+            }
+
+        }
+
+        return $callback();
+    }
+
+    /**
+     * Handle the query result.
      *
      * @param $result
      * @param $methodName
      * @param $arguments
      * @return mixed
      */
-    protected function applyTraits($result, $methodName, $arguments)
+    protected function doAfterQuery($result, $methodName, $arguments)
     {
         $traits = $this->getUsedTraits();
 
@@ -253,10 +315,6 @@ abstract class BaseEloquentRepository implements RepositoryContract
             if (is_null($result)) {
                 $this->throwNotFoundHttpException($methodName, $arguments);
             }
-        }
-
-        if (in_array(CacheResults::class, $traits)) {
-            
         }
 
         return $result;

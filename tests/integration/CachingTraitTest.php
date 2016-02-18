@@ -96,5 +96,6 @@ class CachingRepository extends BaseEloquentRepository
     public function __construct()
     {
         $this->model = new Post();
+        $this->setUses();
     }
 }

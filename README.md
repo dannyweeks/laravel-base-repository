@@ -75,9 +75,35 @@ Relationships can be loaded in the following three ways using the `with()` metho
     }
 ```
 
+## HTTP Exceptions
+To enable http exceptions (like Eloquent's findOrFail method) on a repository just have it `use \Weeks\Laravel\Repositories\Traits\ThrowsHttpExceptions;`.
+
+If the below methods return null they will throw a 404 error instead of returning null.
+
+```
+getById
+getItemByColumn
+```
+
+An example using the ThrowsHttpExceptions trait.
+
+```php
+
+    namespace App\Repositories;
+    
+    use Weeks\Laravel\Repositories\BaseEloquentRepository;
+    use Weeks\Laravel\Repositories\Traits\ThrowsHttpExceptions;
+    
+    class PostRepository extends BaseEloquentRepository
+    {
+        use ThrowsHttpExceptions;
+
+    }
+```
+
 ## Caching
 
-To enable caching on a repository just have it `use \Weeks\Laravel\Repositories\CacheResults;`.
+To enable caching on a repository just have it `use \Weeks\Laravel\Repositories\Traits\CacheResults;`.
 
 By doing this all the repository ['read'](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods cache their results using Laravel's caching system.
 
@@ -98,7 +124,7 @@ An example using the CacheResults trait.
     namespace App\Repositories;
     
     use Weeks\Laravel\Repositories\BaseEloquentRepository;
-    use Weeks\Laravel\Repositories\CacheResults;
+    use Weeks\Laravel\Repositories\Traits\CacheResults;
     
     class PostRepository extends BaseEloquentRepository
     {
