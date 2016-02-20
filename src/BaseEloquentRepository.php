@@ -235,10 +235,10 @@ abstract class BaseEloquentRepository implements RepositoryContract
     /**
      * Choose what relationships to return with query.
      *
-     * @param null $relationships
+     * @param mixed $relationships
      * @return $this
      */
-    public function with($relationships = null)
+    public function with($relationships)
     {
         $this->requiredRelationships = [];
 
