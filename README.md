@@ -190,11 +190,11 @@ An example using the CacheResults trait.
         
         protected $model = App\Models\Post::class;
         protected $relationships = ['comments', 'author'];
-        protected $ignoredMethods = ['getById'];
+        protected $nonCacheableMethods = ['getById'];
         protected $cacheTtl = 30;
     }
 ```
 
-You can force the result of a request not to be cached by adding the method name to the `$ignoredMethods` property of your repository. See example above.
+You can force the result of a request not to be cached by adding the method name to the `$nonCacheableMethods` property of your repository. See example above.
 
 By default the [ttl](https://en.wikipedia.org/wiki/Time_to_live) of a cache item is 60 minutes. This can be overwritten by updating the ` $cacheTtl` property of your repository. See example above.

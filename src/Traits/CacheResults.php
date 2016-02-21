@@ -8,6 +8,21 @@ namespace Weeks\Laravel\Repositories\Traits;
 trait CacheResults
 {
     /**
+     * Array of predefined method that should cache.
+     *
+     * @var array
+     */
+    protected $baseCacheableMethods = [
+        'getAll',
+        'getPaginated',
+        'getForSelect',
+        'getById',
+        'getItemByColumn',
+        'getCollectionByColumn',
+        'getActively',
+    ];
+
+    /**
      * Get ttl (minutes).
      *
      * @return int
@@ -15,16 +30,6 @@ trait CacheResults
     protected function getCacheTtl()
     {
         return isset($this->cacheTtl) ? $this->cacheTtl : 60;
-    }
-
-    /**
-     * Methods that should never be cached.
-     *
-     * @return array
-     */
-    protected function getIgnoredMethods()
-    {
-        return isset($this->ignoredMethods) ? $this->ignoredMethods : [];
     }
 
     /**
@@ -37,8 +42,7 @@ trait CacheResults
      */
     protected function processCacheRequest($callback, $method, $args)
     {
-        if ($this->isCaching() && !in_array($method, $this->getIgnoredMethods())) {
-
+        if ($this->isCaching()) {
             $key = $this->createCacheKey($method, $args);
 
             return $this->getCache()->remember($key, $this->getCacheTtl(), $callback);
@@ -65,5 +69,27 @@ trait CacheResults
     protected function getCache()
     {
         return app()->make('Illuminate\Contracts\Cache\Repository');
+    }
+
+    /**
+     * @return array
+     */
+    protected function getCacheableMethods()
+    {
+        $methods = $this->baseCacheableMethods;
+
+        // Include user defined methods.
+        if (isset($this->cacheableMethods)) {
+            $methods = array_merge($this->baseCacheableMethods, $this->cacheableMethods);
+        }
+
+        // Filter any unwanted methods.
+        if (isset($this->nonCacheableMethods)) {
+            $methods = array_filter($methods, function ($methodName) {
+                return !in_array($methodName, $this->nonCacheableMethods);
+            });
+        }
+
+        return $methods;
     }
 }

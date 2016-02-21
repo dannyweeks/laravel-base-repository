@@ -98,6 +98,20 @@ class CachingTraitTest extends BaseTestCase
 
         $this->assertEquals($before + 1, count(\DB::getQueryLog()));
     }
+
+    /**
+    * @test
+    */
+    public function it_caches_custom_methods()
+    {
+        factory(Post::class)->create();
+        $this->repo->getTestMethod();
+        $before = count(\DB::getQueryLog());
+
+        $this->repo->getTestMethod();
+
+        $this->assertEquals($before, count(\DB::getQueryLog()), 'The database was hit unexpectedly.');
+    }
 }
 
 class CachingRepository extends BaseEloquentRepository
@@ -105,11 +119,19 @@ class CachingRepository extends BaseEloquentRepository
     use CacheResults;
 
     protected $cacheTtl = 30;
-    protected $ignoredMethods = ['getById'];
+    protected $nonCacheableMethods = ['getById'];
+    protected $cacheableMethods = ['getTestMethod'];
 
     public function __construct()
     {
         $this->model = new Post();
         $this->setUses();
+    }
+
+    public function getTestMethod()
+    {
+        return $this->doQuery(function() {
+            return $this->model->where('title', 'some title')->get();
+        });
     }
 }

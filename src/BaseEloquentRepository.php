@@ -285,20 +285,9 @@ abstract class BaseEloquentRepository implements RepositoryContract
         $traits = $this->getUsedTraits();
 
         if ($this->isCaching()) {
-            $allowedMethods = [
-                'getAll',
-                'getPaginated',
-                'getForSelect',
-                'getById',
-                'getItemByColumn',
-                'getCollectionByColumn',
-                'getActively',
-            ];
-
-            if (in_array($methodName, $allowedMethods)) {
+            if (in_array($methodName, $this->getCacheableMethods())) {
                 return $this->processCacheRequest($callback, $methodName, $arguments);
             }
-
         }
 
         return $callback();
