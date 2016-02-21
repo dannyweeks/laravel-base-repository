@@ -62,7 +62,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
 
         };
 
-        return $this->doQuery($query, __FUNCTION__, func_get_args());
+        return $this->doQuery($query);
     }
 
     /**
@@ -83,7 +83,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
                 ->paginate($paged);
         };
 
-        return $this->doQuery($query, __FUNCTION__, func_get_args());
+        return $this->doQuery($query);
     }
 
     /**
@@ -105,7 +105,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
                 ->all();
         };
 
-        return $this->doQuery($query, __FUNCTION__, func_get_args());
+        return $this->doQuery($query);
     }
 
     /**
@@ -122,7 +122,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
                 ->find($id);
         };
 
-        return $this->doQuery($query, __FUNCTION__, func_get_args());
+        return $this->doQuery($query);
     }
 
     /**
@@ -141,7 +141,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
                 ->first();
         };
 
-        return $this->doQuery($query, __FUNCTION__, func_get_args());
+        return $this->doQuery($query);
     }
 
     /**
@@ -160,7 +160,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
                 ->get();
         };
 
-        return $this->doQuery($query, __FUNCTION__, func_get_args());
+        return $this->doQuery($query);
     }
 
     /**
@@ -259,12 +259,14 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * Perform the repository query.
      *
      * @param $callback
-     * @param $methodName
-     * @param $arguments
      * @return mixed
      */
-    protected function doQuery($callback, $methodName, $arguments)
+    protected function doQuery($callback)
     {
+        $previousMethod = debug_backtrace(null, 2)[1];
+        $methodName = $previousMethod['function'];
+        $arguments = $previousMethod['args'];
+
         $result = $this->doBeforeQuery($callback, $methodName, $arguments);
 
         return $this->doAfterQuery($result, $methodName, $arguments);
@@ -278,7 +280,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * @param $arguments
      * @return mixed
      */
-    protected function doBeforeQuery($callback, $methodName, $arguments)
+    private function doBeforeQuery($callback, $methodName, $arguments)
     {
         $traits = $this->getUsedTraits();
 
@@ -310,7 +312,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * @param $arguments
      * @return mixed
      */
-    protected function doAfterQuery($result, $methodName, $arguments)
+    private function doAfterQuery($result, $methodName, $arguments)
     {
         $traits = $this->getUsedTraits();
 

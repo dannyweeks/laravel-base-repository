@@ -73,6 +73,21 @@ class CachingTraitTest extends BaseTestCase
     /**
      * @test
      */
+    public function it_caches_the_request_with_arguments()
+    {
+        factory(Post::class)->create(['title' => 'so say we all']);
+
+        $this->repo->getItemByColumn('so say we all', 'title');
+        $before = count(\DB::getQueryLog());
+
+        $this->repo->getItemByColumn('so say we all', 'title');
+
+        $this->assertEquals($before, count(\DB::getQueryLog()));
+    }
+
+    /**
+     * @test
+     */
     public function it_ignores_specified_requests()
     {
         factory(Post::class)->create();
