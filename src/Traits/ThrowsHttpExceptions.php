@@ -6,6 +6,20 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 trait ThrowsHttpExceptions
 {
+    private $baseThrowableMethods = ['getById', 'getItemByColumn'];
+
+    /**
+     * @return array
+     */
+    protected function getThrowableMethods()
+    {
+        if (isset($this->throwableMethods)) {
+            return array_merge($this->baseThrowableMethods, $this->throwableMethods);
+        }
+
+        return $this->baseThrowableMethods;
+    }
+
     /**
      * @param string $methodName
      * @param string $args

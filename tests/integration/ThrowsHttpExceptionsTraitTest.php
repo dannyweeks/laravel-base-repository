@@ -7,7 +7,7 @@ use Weeks\Laravel\Repositories\Traits\ThrowsHttpExceptions;
 class ThrowsHttpExceptionsTraitTest extends BaseTestCase
 {
     /**
-     * @var CachingRepository
+     * @var HttpRepository
      */
     protected $repo;
 
@@ -81,6 +81,25 @@ class ThrowsHttpExceptionsTraitTest extends BaseTestCase
         $this->repo->getPaginated();
         $this->repo->getForSelect('name');
         $this->repo->getCollectionByColumn('name');
+        $this->repo->testNotThrow();
+    }
+
+    /**
+    * @test
+    *
+    */
+    public function it_throws_exceptions_for_custom_methods()
+    {
+
+        try {
+            $this->repo->testThrow();
+        } catch (HttpException $e) {
+            $this->assertEquals(HttpException::class, get_class($e));
+
+            return;
+        }
+
+        $this->fail('Expected Exception is not thrown');
     }
 }
 
@@ -88,9 +107,25 @@ class HttpRepository extends BaseEloquentRepository
 {
     use ThrowsHttpExceptions;
 
+    protected $throwableMethods = ['testThrow'];
+
     public function __construct()
     {
         $this->model = new Post();
         $this->setUses();
+    }
+
+    public function testThrow()
+    {
+        return $this->doQuery(function(){
+            return null;
+        });
+    }
+
+    public function testNotThrow()
+    {
+        return $this->doQuery(function(){
+            return null;
+        });
     }
 }
