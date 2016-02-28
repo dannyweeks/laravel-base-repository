@@ -101,6 +101,22 @@ class ThrowsHttpExceptionsTraitTest extends BaseTestCase
 
         $this->fail('Expected Exception is not thrown');
     }
+
+    /**
+    * @test
+    *
+    */
+    public function it_does_not_throw_exceptions_if_automatic_is_turned_off()
+    {
+        try {
+            $this->repo->disableHttpExceptions()->testThrow();
+        } catch (HttpException $e) {
+
+            $this->fail('Should not have thrown exception.');
+
+            return;
+        }
+    }
 }
 
 class HttpRepository extends BaseEloquentRepository

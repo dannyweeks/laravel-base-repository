@@ -159,6 +159,14 @@ An example using the ThrowsHttpExceptions trait.
     }
 ```
 
+You can temporarily disable HTTP exceptions by chaining `disableHttpExceptions()` before performing a query. For example:
+
+```php
+$posts = new PostRepository();
+
+$post = $posts->disableHttpExceptions()->getById(1000); // returns null rather than throwing a 404 error.
+```
+
 ## Caching
 
 To enable caching on a repository just have it `use \Weeks\Laravel\Repositories\Traits\CacheResults;`.

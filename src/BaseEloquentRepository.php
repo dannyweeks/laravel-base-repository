@@ -306,9 +306,12 @@ abstract class BaseEloquentRepository implements RepositoryContract
         $traits = $this->getUsedTraits();
 
         if (in_array(ThrowsHttpExceptions::class, $traits)) {
-            if (in_array($methodName, $this->getThrowableMethods()) && is_null($result)) {
+
+            if ($this->shouldThrowHttpException($result, $methodName)) {
                 $this->throwNotFoundHttpException($methodName, $arguments);
             }
+
+            $this->exceptionsDisabled = false;
         }
 
         return $result;

@@ -8,6 +8,30 @@ trait ThrowsHttpExceptions
 {
     private $baseThrowableMethods = ['getById', 'getItemByColumn'];
 
+    protected $exceptionsDisabled = false;
+
+    /**
+     * @return $this
+     */
+    public function disableHttpExceptions()
+    {
+        $this->exceptionsDisabled = true;
+
+        return $this;
+    }
+
+    /**
+     * @param $result
+     * @param $methodName
+     * @return bool
+     */
+    protected function shouldThrowHttpException($result, $methodName)
+    {
+        return $this->exceptionsDisabled === false
+        && in_array($methodName, $this->getThrowableMethods())
+        && is_null($result);
+    }
+
     /**
      * @return array
      */
