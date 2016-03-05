@@ -1,5 +1,5 @@
 # Laravel Base Repository
-[![Build Status](https://travis-ci.org/dannyweeks/laravel-base-repository.svg?branch=v0.1)](https://travis-ci.org/dannyweeks/laravel-base-repository)
+[![Build Status](https://travis-ci.org/dannyweeks/laravel-base-repository.svg?branch=master)](https://travis-ci.org/dannyweeks/laravel-base-repository)
 
 An abstract repository class for your Eloquent repositories that requires minimal config to get started. 
 
