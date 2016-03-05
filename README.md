@@ -206,3 +206,5 @@ An example using the CacheResults trait.
 You can force the result of a request not to be cached by adding the method name to the `$nonCacheableMethods` property of your repository. See example above.
 
 By default the [ttl](https://en.wikipedia.org/wiki/Time_to_live) of a cache item is 60 minutes. This can be overwritten by updating the ` $cacheTtl` property of your repository. See example above.
+
+Caching can be disabled programatically by calling `disabledCaching()` on your repository. This method returns the repository to enable method chaining e.g. `$repo->disableCaching()->getAll();`.

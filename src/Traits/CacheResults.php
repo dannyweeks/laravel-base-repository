@@ -23,6 +23,18 @@ trait CacheResults
     ];
 
     /**
+     * Disable caching on the fly.
+     *
+     * @return $this
+     */
+    public function disableCaching()
+    {
+        $this->caching = false;
+
+        return $this;
+    }
+
+    /**
      * Get ttl (minutes).
      *
      * @return int
@@ -30,6 +42,15 @@ trait CacheResults
     protected function getCacheTtl()
     {
         return isset($this->cacheTtl) ? $this->cacheTtl : 60;
+    }
+
+    /**
+     * @param $methodName
+     * @return bool
+     */
+    protected function isCacheableMethod($methodName)
+    {
+        return in_array($methodName, $this->getCacheableMethods());
     }
 
     /**
@@ -42,13 +63,9 @@ trait CacheResults
      */
     protected function processCacheRequest($callback, $method, $args)
     {
-        if ($this->isCaching()) {
-            $key = $this->createCacheKey($method, $args);
+        $key = $this->createCacheKey($method, $args);
 
-            return $this->getCache()->remember($key, $this->getCacheTtl(), $callback);
-        }
-
-        return $callback();
+        return $this->getCache()->remember($key, $this->getCacheTtl(), $callback);
     }
 
     /**

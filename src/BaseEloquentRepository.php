@@ -34,6 +34,8 @@ abstract class BaseEloquentRepository implements RepositoryContract
 
     protected $cacheTtl = 60;
 
+    protected $caching = true;
+
     /**
      * Get the model from the IoC container
      */
@@ -284,10 +286,8 @@ abstract class BaseEloquentRepository implements RepositoryContract
     {
         $traits = $this->getUsedTraits();
 
-        if ($this->isCaching()) {
-            if (in_array($methodName, $this->getCacheableMethods())) {
-                return $this->processCacheRequest($callback, $methodName, $arguments);
-            }
+        if (in_array(CacheResults::class, $traits) && $this->caching && $this->isCacheableMethod($methodName)) {
+            return $this->processCacheRequest($callback, $methodName, $arguments);
         }
 
         return $callback();
@@ -305,6 +305,11 @@ abstract class BaseEloquentRepository implements RepositoryContract
     {
         $traits = $this->getUsedTraits();
 
+        if (in_array(CacheResults::class, $traits)) {
+            // Reset caching to enabled in case it has just been disabled.
+            $this->caching = true;
+        }
+
         if (in_array(ThrowsHttpExceptions::class, $traits)) {
 
             if ($this->shouldThrowHttpException($result, $methodName)) {
@@ -315,15 +320,6 @@ abstract class BaseEloquentRepository implements RepositoryContract
         }
 
         return $result;
-    }
-
-    /**
-     *  The repository does not cache by default.
-     * @return bool
-     */
-    protected function isCaching()
-    {
-        return in_array(CacheResults::class, $this->getUsedTraits());
     }
 
     /**

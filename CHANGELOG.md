@@ -5,8 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 ### Added
-- Results caching. Just add `use \Weeks\Laravel\Repositories\Traits\CacheResults;` to your repositories and let me do the rest.
-- HTTP exceptions when appropriate. Just add `use \Weeks\Laravel\Repositories\Traits\ThrowsHttpExceptions;` to your repositories and let me do the rest.
+- Optional extra functionality. Add the trait to your repositories and let me do the rest
+    - Results caching. Just add `use \Weeks\Laravel\Repositories\Traits\CacheResults;`.
+    - Throw HTTP exceptions when appropriate. Just add `use \Weeks\Laravel\Repositories\Traits\ThrowsHttpExceptions;`.
 - Eloquent integration tests.
 - Cache trait tests.
 - Http trait tests.

@@ -42,14 +42,6 @@ class CachingTraitTest extends BaseTestCase
     /**
      * @test
      */
-    public function repo_is_aware_it_is_caching()
-    {
-        $this->assertTrue($this->invokeMethod($this->repo, 'isCaching'));
-    }
-
-    /**
-     * @test
-     */
     public function default_ttl_can_be_overridden()
     {
         $this->assertEquals(30, $this->invokeMethod($this->repo, 'getCacheTtl'));
@@ -111,6 +103,20 @@ class CachingTraitTest extends BaseTestCase
         $this->repo->getTestMethod();
 
         $this->assertEquals($before, count(\DB::getQueryLog()), 'The database was hit unexpectedly.');
+    }
+
+    /**
+    * @test
+    */
+    public function caching_can_be_disabled_programatically()
+    {
+        factory(Post::class)->create();
+        $this->repo->getAll();
+        $before = count(\DB::getQueryLog());
+
+        $this->repo->disableCaching()->getAll();
+
+        $this->assertEquals($before + 1, count(\DB::getQueryLog()), 'The database was hit unexpectedly.');
     }
 }
 
