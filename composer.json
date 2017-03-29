@@ -15,6 +15,11 @@
             "email": "danny@dannyweeks.com",
             "homepage": "http://dannyweeks.com/",
             "role": "Developer"
+        },
+        {
+            "name": "Kirk Franklin",
+            "email": "kirk@magneato.com",
+            "role": "Contributor"
         }
     ],
     "require": {
