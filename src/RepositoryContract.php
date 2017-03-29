@@ -34,7 +34,7 @@ interface RepositoryContract
     public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'desc');
 
     /**
-     * Get item by its id
+     * Get item by its ID
      *
      * @param  mixed $id
      */
@@ -57,7 +57,7 @@ interface RepositoryContract
     public function getCollectionByColumn($term, $column = 'slug');
 
     /**
-     * Get item by id or column
+     * Get item by ID or column
      *
      * @param  mixed $term id or term
      * @param  string $column column to search
@@ -73,7 +73,7 @@ interface RepositoryContract
     public function create(array $data);
 
     /**
-     * Update or crate a record and return the entity
+     * Update or create a record and return the entity
      *
      * @param array $identifiers columns to search for
      * @param array $data
@@ -81,10 +81,18 @@ interface RepositoryContract
     public function updateOrCreate(array $identifiers, array $data);
 
     /**
-     * Delete a record by it's ID.
+     * Delete a record by its ID
      *
      * @param $id
      * @return bool
      */
     public function delete($id);
+
+    /**
+     * Choose what relationships to return with query
+     *
+     * @param mixed $relationships
+     * @return $this
+     */
+    public function with($relationships);
 }
