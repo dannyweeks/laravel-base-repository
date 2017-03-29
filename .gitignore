@@ -1,2 +1,4 @@
 vendor/
 .idea/
+/laravel-base-repository.sublime-project
+/laravel-base-repository.sublime-workspace
