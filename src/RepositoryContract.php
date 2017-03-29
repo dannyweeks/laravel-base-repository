@@ -11,7 +11,7 @@ interface RepositoryContract
      * @param  string $orderBy column to sort by
      * @param  string $sort sort direction
      */
-    public function getAll($columns = null, $orderBy = 'created_at', $sort = 'DECS');
+    public function getAll($columns = null, $orderBy = 'created_at', $sort = 'desc');
 
     /**
      * Get paged items
@@ -20,7 +20,7 @@ interface RepositoryContract
      * @param  string $orderBy Column to sort by
      * @param  string $sort Sort direction
      */
-    public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'DECS');
+    public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'desc');
 
     /**
      * Items for select options
@@ -29,12 +29,12 @@ interface RepositoryContract
      * @param  string $key column to be used as the value in option
      * @param  string $orderBy column to sort by
      * @param  string $sort sort direction
-     * @return array           array with key value pairs
+     * @return array array with key value pairs
      */
-    public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'DECS');
+    public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'desc');
 
     /**
-     * Get item by its id
+     * Get item by its ID
      *
      * @param  mixed $id
      */
@@ -57,7 +57,7 @@ interface RepositoryContract
     public function getCollectionByColumn($term, $column = 'slug');
 
     /**
-     * Get item by id or column
+     * Get item by ID or column
      *
      * @param  mixed $term id or term
      * @param  string $column column to search
@@ -73,7 +73,7 @@ interface RepositoryContract
     public function create(array $data);
 
     /**
-     * Update or crate a record and return the entity
+     * Update or create a record and return the entity
      *
      * @param array $identifiers columns to search for
      * @param array $data
@@ -81,11 +81,18 @@ interface RepositoryContract
     public function updateOrCreate(array $identifiers, array $data);
 
     /**
-     * Delete a record by it's ID.
+     * Delete a record by its ID
      *
      * @param $id
      * @return bool
      */
     public function delete($id);
 
+    /**
+     * Choose what relationships to return with query
+     *
+     * @param mixed $relationships
+     * @return $this
+     */
+    public function with($relationships);
 }

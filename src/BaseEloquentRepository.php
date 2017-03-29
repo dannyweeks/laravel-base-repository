@@ -53,7 +53,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * @param  string $sort sort direction
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAll($columns = null, $orderBy = 'created_at', $sort = 'DECS')
+    public function getAll($columns = null, $orderBy = 'created_at', $sort = 'desc')
     {
         $query = function () use ($columns, $orderBy, $sort) {
 
@@ -75,7 +75,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * @param  string $sort Sort direction
      * @return \Illuminate\Pagination\Paginator
      */
-    public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'DECS')
+    public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'desc')
     {
         $query = function () use ($paged, $orderBy, $sort) {
 
@@ -95,9 +95,9 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * @param  string $key column to be used as the value in option
      * @param  string $orderBy column to sort by
      * @param  string $sort sort direction
-     * @return array           array with key value pairs
+     * @return array array with key value pairs
      */
-    public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'DECS')
+    public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'desc')
     {
         $query = function () use ($data, $key, $orderBy, $sort) {
             return $this->model
@@ -193,7 +193,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
     }
 
     /**
-     * Update a record using the primary key.
+     * Update a record using the primary key
      *
      * @param $id mixed primary key
      * @param $data array
@@ -204,7 +204,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
     }
 
     /**
-     * Update or crate a record and return the entity
+     * Update or create a record and return the entity
      *
      * @param array $identifiers columns to search for
      * @param array $data
@@ -224,7 +224,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
     }
 
     /**
-     * Delete a record by the primary key.
+     * Delete a record by the primary key
      *
      * @param $id
      * @return bool
@@ -235,7 +235,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
     }
 
     /**
-     * Choose what relationships to return with query.
+     * Choose what relationships to return with query
      *
      * @param mixed $relationships
      * @return $this
@@ -244,7 +244,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
     {
         $this->requiredRelationships = [];
 
-        if ($relationships == 'all') {
+        if (mb_strtolower($relationships) === 'all') {
             $this->requiredRelationships = $this->relationships;
         } elseif (is_array($relationships)) {
             $this->requiredRelationships = array_filter($relationships, function ($value) {
@@ -258,7 +258,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
     }
 
     /**
-     * Perform the repository query.
+     * Perform the repository query
      *
      * @param $callback
      * @return mixed
@@ -266,8 +266,8 @@ abstract class BaseEloquentRepository implements RepositoryContract
     protected function doQuery($callback)
     {
         $previousMethod = debug_backtrace(null, 2)[1];
-        $methodName = $previousMethod['function'];
-        $arguments = $previousMethod['args'];
+        $methodName     = $previousMethod['function'];
+        $arguments      = $previousMethod['args'];
 
         $result = $this->doBeforeQuery($callback, $methodName, $arguments);
 
@@ -311,7 +311,6 @@ abstract class BaseEloquentRepository implements RepositoryContract
         }
 
         if (in_array(ThrowsHttpExceptions::class, $traits)) {
-
             if ($this->shouldThrowHttpException($result, $methodName)) {
                 $this->throwNotFoundHttpException($methodName, $arguments);
             }

@@ -51,8 +51,8 @@ trait ThrowsHttpExceptions
     protected function throwNotFoundHttpException($methodName = '', $args = '')
     {
         $columnIdFormat = 'Item not found with the %3$s of \'%4$s\' in the %1$s model via the %2$s.';
-        $format = 'Requested item does not exist in the %s model via %s.';
-        $data = [];
+        $format         = 'Requested item does not exist in the %s model via %s.';
+        $data           = [];
 
         if ($methodName == 'getById') {
             $format = $columnIdFormat;

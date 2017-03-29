@@ -15,11 +15,16 @@
             "email": "danny@dannyweeks.com",
             "homepage": "http://dannyweeks.com/",
             "role": "Developer"
+        },
+        {
+            "name": "Kirk Franklin",
+            "email": "kirk@magneato.com",
+            "role": "Contributor"
         }
     ],
     "require": {
         "illuminate/database": ">4.0",
-        "illuminate/pagination": "5.2.*"
+        "illuminate/pagination": "5.4.*"
     },
     "require-dev": {
         "orchestra/testbench": "3.2.*",
