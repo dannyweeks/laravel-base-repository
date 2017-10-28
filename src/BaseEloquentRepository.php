@@ -53,7 +53,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * @param  string $sort sort direction
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAll($columns = null, $orderBy = 'created_at', $sort = 'DECS')
+    public function getAll($columns = null, $orderBy = 'created_at', $sort = 'desc')
     {
         $query = function () use ($columns, $orderBy, $sort) {
 
@@ -75,7 +75,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * @param  string $sort Sort direction
      * @return \Illuminate\Pagination\Paginator
      */
-    public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'DECS')
+    public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'desc')
     {
         $query = function () use ($paged, $orderBy, $sort) {
 
@@ -97,7 +97,7 @@ abstract class BaseEloquentRepository implements RepositoryContract
      * @param  string $sort sort direction
      * @return array           array with key value pairs
      */
-    public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'DECS')
+    public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'desc')
     {
         $query = function () use ($data, $key, $orderBy, $sort) {
             return $this->model
