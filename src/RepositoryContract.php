@@ -11,7 +11,7 @@ interface RepositoryContract
      * @param  string $orderBy column to sort by
      * @param  string $sort sort direction
      */
-    public function getAll($columns = null, $orderBy = 'created_at', $sort = 'DECS');
+    public function getAll($columns = null, $orderBy = 'created_at', $sort = 'desc');
 
     /**
      * Get paged items
@@ -20,7 +20,7 @@ interface RepositoryContract
      * @param  string $orderBy Column to sort by
      * @param  string $sort Sort direction
      */
-    public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'DECS');
+    public function getPaginated($paged = 15, $orderBy = 'created_at', $sort = 'desc');
 
     /**
      * Items for select options
@@ -31,7 +31,7 @@ interface RepositoryContract
      * @param  string $sort sort direction
      * @return array           array with key value pairs
      */
-    public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'DECS');
+    public function getForSelect($data, $key = 'id', $orderBy = 'created_at', $sort = 'desc');
 
     /**
      * Get item by its id
